@@ -13,11 +13,11 @@ let current_student = {}
 
 // GETERS
 
-app.get("/", (req, res) => {
+index.app.get("/", (req, res) => {
     res.render("home")
 })
 
-app.get("/warning/:id", (req, res) => {
+index.app.get("/warning/:id", (req, res) => {
     current_student[req.params.id] = req.params.id
     fs.readFile('files/students.json', (err, data) => {
         if (err) throw err
@@ -30,7 +30,7 @@ app.get("/warning/:id", (req, res) => {
     })
 })
 
-app.get("/test/:id", (req, res) => {
+index.app.get("/test/:id", (req, res) => {
     if (current_page !== Object.keys(questions).length) current_page++
     if (current_page === Object.keys(questions).length) next_btn = false
 
@@ -45,7 +45,7 @@ app.get("/test/:id", (req, res) => {
     })
 })
 
-app.get("/result/:id", (req, res) => {
+index.app.get("/result/:id", (req, res) => {
     let students = fs.readFileSync("files/students.json")
     let results = fs.readFileSync("files/results.json")
     students = JSON.parse(students)
@@ -68,11 +68,11 @@ app.get("/result/:id", (req, res) => {
     })
 })
 
-app.get("/admin", (req, res) => {
+index.app.get("/admin", (req, res) => {
     res.render("admin")
 })
 
-app.get("/all_users/4111", (req, res) => {
+index.app.get("/all_users/4111", (req, res) => {
     let students = fs.readFileSync("files/students.json")
     students = JSON.parse(students)
     let id_numbers = Object.keys(students.id)
@@ -86,7 +86,7 @@ app.get("/all_users/4111", (req, res) => {
     })
 })
 
-app.get("/somebody/:id", (req, res) => {
+index.app.get("/somebody/:id", (req, res) => {
     let students = fs.readFileSync("files/students.json")
     students = JSON.parse(students)
     students = students.id[req.params.id].answers
@@ -115,7 +115,7 @@ app.get("/somebody/:id", (req, res) => {
 
 // POSTERS
 
-app.post("/", url_encoded, (req, res) => {
+index.app.post("/", url_encoded, (req, res) => {
     let student = {
         name: req.body.name,
         surname: req.body.surname,
@@ -134,11 +134,11 @@ app.post("/", url_encoded, (req, res) => {
     else res.redirect(301, "/warning/" + student.id_number)
 })
 
-app.post("/warning/:id", (req, res) => {
+index.app.post("/warning/:id", (req, res) => {
     res.redirect(301, "/test/" + req.params.id)
 })
 
-app.post("/test/:id", url_encoded, (req, res) => {
+index.app.post("/test/:id", url_encoded, (req, res) => {
     let students = fs.readFileSync("files/students.json")
     students = JSON.parse(students)
     let answer = req.body.test ? req.body.test : ""
@@ -153,7 +153,7 @@ app.post("/test/:id", url_encoded, (req, res) => {
     } else res.redirect(301, "/test/" + req.params.id)
 })
 
-app.post("/admin", url_encoded, (req, res) => {
+index.app.post("/admin", url_encoded, (req, res) => {
     let name = req.body.name
     let password = req.body.password
     if (name === "admin" && password == 4111) res.redirect(301, "/all_users/4111")
